@@ -222,6 +222,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
             Submit new Job
           </Button>
         </Grid>
+        {/* Add ErrorMessage component to display the errors */}
         <Grid item xs={12}>
           <ErrorMessage show={displayError} errorMessages={errorMessages} />
         </Grid>
