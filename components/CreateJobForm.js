@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,7 +20,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
   const [displayError, setDisplayError] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
-  const [jobTitle, setJobTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -28,15 +28,51 @@ export default function CreateJobForm({ jobs, setJobs }) {
   const [qualifications, setQualifications] = useState("");
   const [datePosted, setDatePosted] = useState(dayjs(Date.now()));
 
+  /**
+   * handle the form submission
+   * @param {*} e
+   * Handle the form submission validating all fields and creating the jobs upon success
+   */
   function handleSubmit(e) {
     e.preventDefault();
 
+    //Create array to contain the error messages to passonto the ErrorMessage component props
     const errorList = [];
 
-    if (jobTitle.trim() === "") {
+    //Validate the fields
+    validateFormFields();
+
+    //Display errors
+    if (errorList.length > 0) {
+      setDisplayError(true); //set visibility for the ErrorMessage element
+      setErrorMessages(errorList);
+    } else {
+      //Upon success create the new job posting
+      const newJobPosting = {
+        title: title,
+        company: companyName,
+        job_type: jobType,
+        location: location,
+        description: jobDescription,
+        qualifications: qualifications,
+        date_posted: datePosted.format("YYYY-MM-DD"),
+      };
+
+      setJobs([...jobs, newJobPosting]);
+
+      //Reset the fields
+      resetFormFields();
+    }
+  }
+
+  /**
+   * Validate all form fields and log the values for verification (TODO remove verification upon completion)
+   */
+  function validateFormFields() {
+    if (title.trim() === "") {
       errorList.push("Title must be at least 10 characters");
     } else {
-      console.log({ jobTitle });
+      console.log({ title });
     }
     if (companyName.trim() === "") {
       errorList.push("Company Name is required");
@@ -65,17 +101,26 @@ export default function CreateJobForm({ jobs, setJobs }) {
     } else {
       console.log({ qualifications });
     }
-    if (datePosted.isBefore(dayjs(Date.now()))) {
+    if (datePosted.isBefore(dayjs(Date.now()).startOf("day"))) {
       errorList.push("Date Posted must be in the future");
     } else {
       console.log(datePosted.format("YYYY-MM-DD"));
     }
+  }
 
-    //Display errors
-    if (errorList.length > 0) {
-      setDisplayError(true); //set visibility for the ErrorMessage element
-      setErrorMessages(errorList);
-    }
+  /**
+   * Reset all fields
+   */
+  function resetFormFields() {
+    setTitle("");
+    setCompanyName("");
+    setJobDescription("");
+    setLocation("");
+    setJobType("");
+    setQualifications("");
+    setDatePosted(dayjs(Date.now()));
+    setDisplayError(false);
+    setErrorMessages([]);
   }
 
   return (
@@ -89,9 +134,9 @@ export default function CreateJobForm({ jobs, setJobs }) {
             label="Job Title"
             fullWidth
             sx={{ width: "80%" }}
-            value={jobTitle}
+            value={title}
             onChange={(e) => {
-              setJobTitle(e.target.value);
+              setTitle(e.target.value);
             }}
           />
         </Grid>
@@ -166,7 +211,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
             sx={{ width: "90%" }}
             multiline
             rows={2}
-            alue={qualifications}
+            value={qualifications}
             onChange={(e) => {
               setQualifications(e.target.value);
             }}
