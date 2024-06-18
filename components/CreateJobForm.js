@@ -58,7 +58,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
         date_posted: datePosted.format("YYYY-MM-DD"),
       };
 
-      setJobs([...jobs, newJobPosting]);
+      setJobs([newJobPosting, ...jobs]);
 
       //Reset the fields
       resetFormFields();

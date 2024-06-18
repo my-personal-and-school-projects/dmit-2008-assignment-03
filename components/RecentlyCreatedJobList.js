@@ -1,9 +1,13 @@
+import { useState } from "react";
+
 import Typography from "@mui/material/Typography";
 import RecentlyCreatedJob from "./RecentlyCreatedJob";
 import SearchBar from "@/components/SearchBar";
 import { Grid } from "@mui/material";
 
 export default function RecentlyCreatedJobList({ jobs }) {
+  const [data, setData] = useState(jobs);
+
   return (
     <>
       <Grid container spacing={2}>
@@ -14,11 +18,11 @@ export default function RecentlyCreatedJobList({ jobs }) {
         </Grid>
 
         <Grid item xs={12}>
-          <SearchBar />
+          <SearchBar data={jobs} setData={setData} />
         </Grid>
 
         <Grid item>
-          {jobs.map((job, index) => {
+          {data.map((job, index) => {
             return <RecentlyCreatedJob key={index} job={job} />;
           })}
         </Grid>
