@@ -16,6 +16,9 @@ import ErrorMessage from "./ErrorMessage";
 
 import { useState } from "react";
 
+//Create array to contain the error messages to passonto the ErrorMessage component props
+let errorList = [];
+
 export default function CreateJobForm({ jobs, setJobs }) {
   const [displayError, setDisplayError] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -26,7 +29,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("");
   const [qualifications, setQualifications] = useState("");
-  const [datePosted, setDatePosted] = useState(dayjs(Date.now()));
+  const [datePosted, setDatePosted] = useState(dayjs().add(1, "day"));
 
   /**
    * handle the form submission
@@ -36,9 +39,6 @@ export default function CreateJobForm({ jobs, setJobs }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    //Create array to contain the error messages to passonto the ErrorMessage component props
-    const errorList = [];
-
     //Validate the fields
     validateFormFields();
 
@@ -47,8 +47,12 @@ export default function CreateJobForm({ jobs, setJobs }) {
       setDisplayError(true); //set visibility for the ErrorMessage element
       setErrorMessages(errorList);
     } else {
-      //Upon success create the new job posting
+      //Upon success create the new job posting and its new ID
+      let newJobPostingId =
+        jobs.length > 0 ? Math.max(...jobs.map((job) => job.id)) + 1 : 1;
+
       const newJobPosting = {
+        id: newJobPostingId,
         title: title,
         company: companyName,
         job_type: jobType,
@@ -58,6 +62,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
         date_posted: datePosted.format("YYYY-MM-DD"),
       };
 
+      console.log(newJobPosting);
       setJobs([newJobPosting, ...jobs]);
 
       //Reset the fields
@@ -69,6 +74,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
    * Validate all form fields and log the values for verification (TODO remove verification upon completion)
    */
   function validateFormFields() {
+    errorList = [];
     if (title.trim() === "") {
       errorList.push("Title must be at least 10 characters");
     } else {
@@ -101,7 +107,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
     } else {
       console.log({ qualifications });
     }
-    if (datePosted.isBefore(dayjs(Date.now()).startOf("day"))) {
+    if (datePosted.isBefore(dayjs().add(1, "day"))) {
       errorList.push("Date Posted must be in the future");
     } else {
       console.log(datePosted.format("YYYY-MM-DD"));
@@ -223,9 +229,11 @@ export default function CreateJobForm({ jobs, setJobs }) {
           </Button>
         </Grid>
         {/* Add ErrorMessage component to display the errors */}
-        <Grid item xs={12}>
-          <ErrorMessage show={displayError} errorMessages={errorMessages} />
-        </Grid>
+        {errorMessages.length > 0 && (
+          <Grid item xs={12}>
+            <ErrorMessage show={displayError} errorMessages={errorMessages} />
+          </Grid>
+        )}
       </Grid>
     </form>
   );
