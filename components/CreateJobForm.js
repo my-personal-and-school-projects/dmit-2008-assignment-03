@@ -108,7 +108,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
     } else {
       console.log({ qualifications });
     }
-    if (datePosted.isBefore(dayjs().add(1, "day"))) {
+    if (datePosted.isBefore(dayjs())) {
       errorList.push("Date Posted must be in the future");
     } else {
       console.log(datePosted.format("YYYY-MM-DD"));
