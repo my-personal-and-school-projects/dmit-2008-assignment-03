@@ -124,7 +124,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
     setLocation("");
     setJobType("");
     setQualifications("");
-    setDatePosted(dayjs(Date.now()));
+    setDatePosted(dayjs(Date.now()).add(1, "day"));
     setDisplayError(false);
     setErrorMessages([]);
   }
@@ -229,7 +229,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
           </Button>
         </Grid>
         {/* Add ErrorMessage component to display the errors */}
-        {errorMessages.length > 0 && (
+        {displayError && (
           <Grid item xs={12}>
             <ErrorMessage show={displayError} errorMessages={errorMessages} />
           </Grid>
