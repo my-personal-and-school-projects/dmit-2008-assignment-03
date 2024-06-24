@@ -230,11 +230,11 @@ export default function CreateJobForm({ jobs, setJobs }) {
           </Button>
         </Grid>
         {/* Add ErrorMessage component to display the errors */}
-        {displayError && (
+        {displayError ? (
           <Grid item xs={12}>
             <ErrorMessage show={displayError} errorMessages={errorMessages} />
           </Grid>
-        )}
+        ) : null}
       </Grid>
     </form>
   );
