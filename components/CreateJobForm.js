@@ -48,6 +48,7 @@ export default function CreateJobForm({ jobs, setJobs }) {
       setErrorMessages(errorList);
     } else {
       //Upon success create the new job posting and its new ID
+      setDisplayError(false);
       let newJobPostingId =
         jobs.length > 0 ? Math.max(...jobs.map((job) => job.id)) + 1 : 1;
 
