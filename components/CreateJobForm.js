@@ -19,7 +19,7 @@ import { useState } from "react";
 //Create array to contain the error messages to passonto the ErrorMessage component props
 let errorList = [];
 
-export default function CreateJobForm({ jobs = [], setJobs }) {
+export default function CreateJobForm({ jobs, setJobs }) {
   const [displayError, setDisplayError] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
