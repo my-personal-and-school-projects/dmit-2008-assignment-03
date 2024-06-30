@@ -19,7 +19,7 @@ import { useState } from "react";
 //Create array to contain the error messages to passonto the ErrorMessage component props
 let errorList = [];
 
-export default function CreateJobForm({ jobs = [], setJobs }) {
+export default function CreateJobForm({ setJobs }) {
   const [displayError, setDisplayError] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
 
@@ -47,13 +47,10 @@ export default function CreateJobForm({ jobs = [], setJobs }) {
       setDisplayError(true); //set visibility for the ErrorMessage element
       setErrorMessages(errorList);
     } else {
-      //Upon success create the new job posting and its new ID
+      //Upon success create the new job posting a
       setDisplayError(false);
-      let newJobPostingId =
-        jobs.length > 0 ? Math.max(...jobs.map((job) => job.id)) + 1 : 1;
 
       const newJobPosting = {
-        id: newJobPostingId,
         title: title,
         company: companyName,
         job_type: jobType,
@@ -63,8 +60,7 @@ export default function CreateJobForm({ jobs = [], setJobs }) {
         date_posted: datePosted.format("YYYY-MM-DD"),
       };
 
-      console.log(newJobPosting);
-      setJobs([newJobPosting, ...jobs]);
+      setJobs(newJobPosting);
 
       //Reset the fields
       resetFormFields();

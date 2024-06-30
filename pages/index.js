@@ -32,13 +32,29 @@ const existingJobs = [
 ];
 
 export default function Home() {
-  //Initialize the state with the existing jb postings
+  //Initialize the state with the existing job postings
   const [jobs, setJobs] = useState(existingJobs);
+
+  //Create the new job
+  const createNewJob = (newJob) => {
+    //Generate the ID for the new job
+    let newJobId =
+      jobs.length > 0 ? Math.max(...jobs.map((job) => job.id)) + 1 : 1;
+
+    //Create the new job with ID
+    const newJobPosting = {
+      id: newJobId,
+      ...newJob,
+    };
+    console.log(newJobPosting);
+    setJobs((existingJobs) => [newJobPosting, ...existingJobs]);
+  };
+
   return (
     <main>
       <NavBar />
       <Container>
-        <CreateJobForm jobs={jobs} setJobs={setJobs} />
+        <CreateJobForm setJobs={createNewJob} />
         <RecentlyCreatedJobList jobs={jobs} />
       </Container>
     </main>
